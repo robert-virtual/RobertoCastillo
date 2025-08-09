@@ -1,0 +1,56 @@
+<div>
+  <input class="search-input" type="search" placeholder="Search..." />
+  <div class="bg-white mt-1 p-2">
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th>Logo</th>
+          <th>Nombre del producto</th>
+          <th>Descripción</th>
+          <th>Fecha de liberación</th>
+          <th>Fecha de reestructuración</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (reg of data; track $index) {
+        <tr (click)="viewProduct(reg)">
+          <td>{{ reg.logo }}</td>
+          <td>{{ reg.productName }}</td>
+          <td>{{ reg.description }}</td>
+          <td>{{ reg.releaseDate }}</td>
+          <td>{{ reg.remakeDate }}</td>
+          <td>
+            <button class="reset-btn h-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    <div class="row space-between">
+      <p>{{ data.length }} resultados</p>
+      <p>
+        <select [(ngModel)]="results" class="">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
+      </p>
+    </div>
+  </div>
+</div>
