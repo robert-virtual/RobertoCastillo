@@ -5,9 +5,13 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Para ejecutar este proyecto
 
-Ejecuta `npm install` o `yarn` 
+1.Ejecuta `npm install` o `yarn` 
 
-Luego Ejecuta `npm run dev` o `yarn dev` 
+2.Luego Ejecuta `npm run dev` o `yarn dev` 
+
+3. Ejecuta el backend 
+
+
 
 
 ## Development server
