@@ -2,6 +2,14 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.2.
 
+
+## Para ejecutar este proyecto
+
+Ejecuta `npm install` o `yarn` 
+
+Luego Ejecuta `npm run dev` o `yarn dev` 
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
