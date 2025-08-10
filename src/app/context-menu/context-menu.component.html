@@ -1,0 +1,5 @@
+    <div *ngIf="contextMenuVisible" class="invisible-overlay" (click)="hideContextMenu()">
+    <div class="context-menu" [ngStyle]="{'top.px':contextMenuTop,'left.px':contextMenuLeft-160}">
+        <ng-content></ng-content>
+    </div>
+    </div>

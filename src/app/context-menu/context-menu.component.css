@@ -1,0 +1,25 @@
+
+.context-menu{
+  position: absolute;
+  display: flex;
+  width: 10rem;
+  flex-direction: column;
+  border-radius: .25rem;
+  box-shadow: 0 0 6px gray;
+  background-color: var(--content-bg-color);
+}
+:host ::ng-deep .option{
+  border-bottom: #dddddd 1px solid;
+  padding: .5rem;
+}
+:host ::ng-deep .option:hover{
+  background-color: var(--bg-color);
+}
+.invisible-overlay{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  
+}

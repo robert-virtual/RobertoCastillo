@@ -1,1 +1,96 @@
-<p>product works!</p>
+<div class="content-bg-color p-2 w-50vw mx-auto">
+    <h2 class="text-center">Formulario de Registro</h2>
+    <hr>
+    <form [formGroup]="productForm" (submit)="sendForm()" class="grid grid-cols-2 gap-1 ">
+        <div class="input-field">
+            <label for="productId">ID</label>
+            <input id="productId" class="reset-input" type="text" formControlName="id" >
+            @if (productForm.controls.id.invalid && (productForm.controls.id.dirty || productForm.controls.id.touched)) {
+                @if ( productForm.controls.id.getError('required')) {
+                <span class="text-red">Campo requerido</span>
+                }
+                @if ( productForm.controls.id.getError('minlength')) {
+                <span class="text-red">Longuitud minima es 3</span>
+                }
+                @if ( productForm.controls.id.getError('maxlength')) {
+                <span class="text-red">Longuitud maxima es 10</span>
+                }
+                @if ( productForm.controls.id.hasError('idExist')) {
+                <span class="text-red">El ID ya existe</span>
+                }
+            }
+        </div>
+
+        <div class="input-field">
+            <label for="productName">Nombre</label>
+            <input  id="productName" class="reset-input" type="text" formControlName="name">
+            @if (productForm.controls.name.invalid && (productForm.controls.name.dirty || productForm.controls.name.touched)) {
+                @if ( productForm.controls.name.getError('required')) {
+                <span class="text-red">Campo requerido</span>
+                }
+                @if ( productForm.controls.name.getError('minlength')) {
+                <span class="text-red">Longuitud minima es 5</span>
+                }
+                @if ( productForm.controls.name.getError('maxlength')) {
+                <span class="text-red">Longuitud maxima es 100</span>
+                }
+
+            }
+        </div>
+
+        <div class="input-field">
+            <label for="productDescription">Descripción</label>
+            <input  id="productDescription" class="reset-input" type="text" formControlName="description">
+            @if (productForm.controls.description.invalid && (productForm.controls.description.dirty || productForm.controls.description.touched)) {
+                @if ( productForm.controls.description.getError('required')) {
+                <span class="text-red">Campo requerido</span>
+                }
+                @if ( productForm.controls.description.getError('minlength')) {
+                <span class="text-red">Longuitud minima es 10</span>
+                }
+                @if ( productForm.controls.description.getError('maxlength')) {
+                <span class="text-red">Longuitud maxima es 200</span>
+                }
+            }
+        </div>
+
+        <div class="input-field">
+            <label for="productLogo">Logo</label>
+            <input  id="productLogo" class="reset-input" type="text" formControlName="logo">
+            @if (productForm.controls.logo.invalid && (productForm.controls.logo.dirty || productForm.controls.logo.touched)) {
+                @if ( productForm.controls.logo.getError('required')) {
+                <span class="text-red">Campo requerido</span>
+                }
+            }
+        </div>
+        <div class="input-field">
+            <label for="productReleaseDate">Fecha Liberación</label>
+            <input id="productReleaseDate" class="reset-input"  type="date" formControlName="date_release">
+            @if (productForm.controls.date_release.invalid && (productForm.controls.date_release.dirty || productForm.controls.date_release.touched)) {
+                @if ( productForm.controls.date_release.getError('required')) {
+                <span class="text-red">Campo requerido</span>
+                }
+                @if ( productForm.controls.date_release.getError('dateInvalid')) {
+                <span class="text-red">Fecha invalida</span>
+                }
+            }
+        </div>
+        <div class="input-field">
+            <label for="productRevisionDate">Fecha Revisión</label>
+            <input id="productRevisionDate" class="reset-input" type="date" formControlName="date_revision">
+            @if (productForm.controls.date_revision.invalid && (productForm.controls.date_revision.dirty || productForm.controls.date_revision.touched)) {
+                @if ( productForm.controls.date_revision.getError('required')) {
+                <span class="text-red">Campo requerido</span>
+                }
+                @if ( productForm.controls.date_revision.getError('dateInvalid')) {
+                <span class="text-red">Fecha invalida</span>
+                }
+            }
+        </div>
+        <div class="row gap-1 mx-auto grid-col-span-2">
+            <button (click)="productForm.reset()" class="reset-btn secondary-btn">Reiniciar</button>
+            <button class="reset-btn primary-btn" >Enviar</button>
+        </div>
+    </form>
+    <app-modal #modal></app-modal>
+</div>

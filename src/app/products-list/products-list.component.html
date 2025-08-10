@@ -1,27 +1,31 @@
-<div>
-  <input class="search-input" type="search" placeholder="Search..." />
-  <div class="bg-white mt-1 p-2">
-    <table class="products-table">
+<div >
+  <div class="row space-between">
+    <input [(ngModel)]="search" #ctrl="ngModel" class="reset-input search-input" type="search" placeholder="Search..."  />
+    <button (click)="viewProduct()" class="reset-btn primary-btn">Agregar</button>
+  </div>
+  <div class="content-bg-color mt-1 p-2">
+    <table class="products-table bg-aliceblue">
       <thead>
         <tr>
           <th>Logo</th>
           <th>Nombre del producto</th>
-          <th>Descripción</th>
-          <th>Fecha de liberación</th>
-          <th>Fecha de reestructuración</th>
+          <th class="nowrap">Descripción &#9432;</th>
+          <th class="nowrap">Fecha de liberación &#9432; </th>
+          <th class="nowrap span-2">Fecha de reestructuración &#9432;</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        @for (reg of data; track $index) {
-        <tr (click)="viewProduct(reg)">
-          <td>{{ reg.logo }}</td>
-          <td>{{ reg.productName }}</td>
-          <td>{{ reg.description }}</td>
-          <td>{{ reg.releaseDate }}</td>
-          <td>{{ reg.remakeDate }}</td>
-          <td>
-            <button class="reset-btn h-2">
+
+        @for (product of productsSearch?.slice(0,itemsPerPage); track $index) {
+        <tr (click)="viewProduct(product.id)">
+          <td> <img [src]="product.logo" [alt]="product.name"> </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.date_release }}</td>
+          <td>{{ product.date_revision }}</td>
+          <td (click)="showContextMenu($event,product)" >
+            <button class="btn h-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -42,10 +46,27 @@
         }
       </tbody>
     </table>
+
+    <app-context-menu #contextMenu>
+      <div class="option" (click)="updateProduct()">
+        <span>Actualizar</span>
+      </div>
+      <div class="option" (click)="deleteProduct()">
+        <span>Eliminar</span>
+      </div>
+    </app-context-menu>
+
     <div class="row space-between">
-      <p>{{ data.length }} resultados</p>
+      @if(productsSearch){
+        <p >{{ productsSearch.slice(0,itemsPerPage).length }} resultados</p>
+      } @else if(productsRequestError){
+        <p>Ocurrio un error al consultar productos</p>
+      } @else{
+        <p > No se encontraron resultados</p>
+      }
+
       <p>
-        <select [(ngModel)]="results" class="">
+        <select [(ngModel)]="itemsPerPage" class="">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
@@ -53,4 +74,6 @@
       </p>
     </div>
   </div>
+
+  <app-modal #modal></app-modal>
 </div>

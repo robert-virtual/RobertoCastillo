@@ -1,0 +1,15 @@
+    <div *ngIf="modalVisible" class="overlay">
+      <div  class="modal" >
+        <div>
+          <p [innerHTML]="modalDescription ?? 'default message'"></p>
+        </div>
+        <div>
+          <hr>
+          <div class="row gap-1 buttons">
+            <button *ngFor="let btn of modalButtons" (click)="closeModal(btn.onclick)" [class]="btn.class"  >{{btn.text}}</button>
+
+            <button *ngIf="!modalButtons" (click)="closeModal()" class="reset-btn secondary-btn"  >Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>

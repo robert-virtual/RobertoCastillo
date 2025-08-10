@@ -1,7 +1,5 @@
 .search-input {
-  padding: 0.5rem;
   border-radius: 0.5rem;
-  outline: none;
   border: solid gray 1px;
 }
 .products-table {
@@ -11,7 +9,6 @@
 }
 
 .products-table thead tr {
-  background-color: aliceblue;
   text-align: left;
 }
 .products-table th,

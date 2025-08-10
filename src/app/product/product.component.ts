@@ -1,12 +1,164 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { ProductsService } from '../services/products.service';
+import { Product } from '../types/Product';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ModalComponent } from '../modal/modal.component';
+import { ActivatedRoute } from '@angular/router';
+import { catchError, debounceTime, map, Observable, of, switchMap, take } from 'rxjs';
+import { dateExactlyOneYearAfter, dateGreaterThan, idVerification } from '../lib/validatorFunctions';
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule,ModalComponent],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit{
 
+  constructor(
+    private productService:ProductsService,
+    private route:ActivatedRoute
+  ){
+
+  }
+  ngOnInit(): void {
+    this.checkParams()
+  }
+  formMode:'new' |'update' = 'new' 
+  checkParams(){
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id == '0' || !id) {
+      this.productForm.controls.id.enable()
+      return
+    }
+    this.productService.getOneProduct(id).subscribe((product)=>{
+      const data = product
+      if (!Object.keys(data).length) {
+       return 
+      }
+      this.productForm.controls.id.setValue(data.id)
+      this.productForm.controls.id.disable()
+      this.productForm.controls.name.setValue(data.name)
+      this.productForm.controls.description.setValue(data.description)
+      this.productForm.controls.logo.setValue(data.logo)
+      this.productForm.controls.date_release.setValue(data.date_release)
+      this.productForm.controls.date_revision.setValue(data.date_revision)
+      this.formMode = 'update'
+    })
+    
+
+    
+  }
+  @ViewChild('modal') modalComponent!:ModalComponent
+
+  productForm = new FormGroup({
+    id: new FormControl(
+        '',
+      {
+        validators:[
+          Validators.required,Validators.minLength(3),Validators.maxLength(10),
+        ],
+        asyncValidators:[idVerification(this.productService)]
+      }
+    ),
+    name: new FormControl('',{validators:[Validators.required,Validators.minLength(6),Validators.maxLength(100)]},),
+    description: new FormControl('',{validators:[Validators.required,Validators.minLength(10),Validators.maxLength(200)]}),
+    logo: new FormControl('',{validators:[Validators.required]}),
+    date_release: new FormControl('',{validators:[Validators.required,dateGreaterThan(new Date())]}),
+    date_revision: new FormControl('',{validators:[Validators.required,dateExactlyOneYearAfter(new Date())]}),
+  })
+  createProductError?:string
+  sendForm(){
+    console.log({productForm:this.productForm});
+    console.log({idErrors:this.productForm.controls.id.hasError('')}) 
+    if (!this.productForm.valid) {
+      this.productForm.markAllAsTouched()
+     return 
+    }
+    this.productForm.controls.id.enable()
+    const product = this.productForm.value as Product
+    console.log({product});
+    if (this.formMode == 'update') {
+     this.updateProduct(product) 
+    this.productForm.controls.id.disable()
+    }
+    if (this.formMode == 'new') {
+     this.createNewProduct(product) 
+    }
+    
+  }
+
+
+  updateProduct(product:Product){
+    this.productService.upateProduct(product).subscribe({
+      next:(data)=>{
+        console.log(data);
+        this.modalComponent.showModal({
+          description:data.message,
+          buttons:[
+            {
+              text:"Aceptar",
+              onclick(){
+
+              },
+              class:"reset-btn primary-btn",
+            }
+          ]
+        })
+      },
+      error:(error:HttpErrorResponse)=>{
+        console.log(error);
+        this.createProductError = error.message
+        this.modalComponent.showModal({
+          description:error.message,
+          buttons:[
+            {
+              text:"Aceptar",
+              onclick(){
+
+              },
+              class:"reset-btn secondary-btn",
+            }
+          ]
+        })
+      }
+    })
+  }
+  createNewProduct(product:Product){
+    this.productService.createProduct(product).subscribe({
+      next:(data)=>{
+        console.log(data);
+        this.modalComponent.showModal({
+          description:data.message,
+          buttons:[
+            {
+              text:"Aceptar",
+              onclick:()=>{
+                this.productForm.reset()
+              },
+              class:"reset-btn primary-btn",
+            }
+          ]
+        })
+      },
+      error:(error:HttpErrorResponse)=>{
+        console.log(error);
+        this.createProductError = error.message
+        this.modalComponent.showModal({
+          description:error.message,
+          buttons:[
+            {
+              text:"Aceptar",
+              onclick(){
+
+              },
+              class:"reset-btn secondary-btn",
+            }
+          ]
+        })
+      }
+    })
+  }
 }
