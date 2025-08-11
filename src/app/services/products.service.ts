@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { BaseResponse } from '../types/BaseResponse';
 import { CreateProductRes, Product } from '../types/Product';
 @Injectable({
@@ -8,7 +7,6 @@ import { CreateProductRes, Product } from '../types/Product';
 })
 export class ProductsService {
 
-  baseURL:string = environment.PRODUCTS_API_BASEURL
 
   constructor(private http:HttpClient) { }
 

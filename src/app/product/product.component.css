@@ -1,3 +1,17 @@
 input.reset-input{
     border: solid 1px var(--primary-text-color);
 }
+.spinner {
+  border: 3px solid var(--primary-text-color);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  width: 16px; 
+  height: 16px; 
+  animation: spin 0.6s linear infinite; 
+  margin-right: 5px; 
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

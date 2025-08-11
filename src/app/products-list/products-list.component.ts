@@ -43,16 +43,19 @@ export class ProductsListComponent implements OnInit {
         p.description.toLowerCase().includes(this._search.toLocaleLowerCase())
     ))
   }
+  loadingProducts: boolean = false
   loadProducts(){
+    this.loadingProducts = true
     this.productsService.getProducts().subscribe({
       next:({data})=>{
         this.products = data
         this.productsSearch = data
+        this.loadingProducts = false
       },
       error:(error:HttpErrorResponse)=>{
         console.log(error);
-        
-       this.productsRequestError = error.message
+        this.loadingProducts = false
+        this.productsRequestError = error.message
       }
     })
   }

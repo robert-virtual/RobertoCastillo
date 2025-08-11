@@ -42,8 +42,14 @@ export function dateGreaterThan(date: Date): ValidatorFn {
   };
 }
 
-export function dateExactlyOneYearAfter(date: Date): ValidatorFn {
+export function dateExactlyOneYearAfter(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
+    const form = control.parent
+    if (!form) {
+     return null 
+    }
+    const date = new Date(form.get('date_release')?.value);
+    date.setDate(date.getDate()+1)
     const controlDate = new Date(control.value);
     controlDate.setDate(controlDate.getDate()+1)
     controlDate.setHours(0,0,0,0)
@@ -51,10 +57,10 @@ export function dateExactlyOneYearAfter(date: Date): ValidatorFn {
     if (!control.value) {
       return null; 
     }
-    const oneYearLater = new Date(date);
+    const oneYearLater = date
     oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
     oneYearLater.setHours(0,0,0,0)
-    console.log({controlDate,oneYearLater})
+    console.log({date,controlDate,oneYearLater})
 
     return controlDate.getTime() === oneYearLater.getTime() ? null : { dateInvalid: true };
   };

@@ -64,7 +64,7 @@
             }
         </div>
         <div class="input-field">
-            <label for="productReleaseDate">Fecha Liberación</label>
+            <label for="productReleaseDate" class="nowrap">Fecha Liberación</label>
             <input id="productReleaseDate" class="reset-input"  type="date" formControlName="date_release">
             @if (productForm.controls.date_release.invalid && (productForm.controls.date_release.dirty || productForm.controls.date_release.touched)) {
                 @if ( productForm.controls.date_release.getError('required')) {
@@ -76,7 +76,7 @@
             }
         </div>
         <div class="input-field">
-            <label for="productRevisionDate">Fecha Revisión</label>
+            <label for="productRevisionDate" class="nowrap">Fecha Revisión</label>
             <input id="productRevisionDate" class="reset-input" type="date" formControlName="date_revision">
             @if (productForm.controls.date_revision.invalid && (productForm.controls.date_revision.dirty || productForm.controls.date_revision.touched)) {
                 @if ( productForm.controls.date_revision.getError('required')) {
@@ -89,7 +89,12 @@
         </div>
         <div class="row gap-1 mx-auto grid-col-span-2">
             <button (click)="productForm.reset()" class="reset-btn secondary-btn">Reiniciar</button>
-            <button class="reset-btn primary-btn" >Enviar</button>
+            <button class="reset-btn primary-btn row items-center" >
+                @if (sendingForm) {
+                    <div class="spinner" ></div>
+                }
+                <div>{{sendingForm ? 'Enviando...':'Enviar'}}</div>
+            </button>
         </div>
     </form>
     <app-modal #modal></app-modal>

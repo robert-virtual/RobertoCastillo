@@ -137,8 +137,14 @@ body {
 .text-red{
   color: red;
 } 
+.items-center{
+  align-items: center;
+}
 @media (max-width: 875px ){
   .grid-cols-2{
     grid-template-columns: 1fr; 
+  }
+  .grid-col-span-2{
+    grid-column: span 1;
   }
 }

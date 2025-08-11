@@ -3,12 +3,13 @@
     <input [(ngModel)]="search" #ctrl="ngModel" class="reset-input search-input" type="search" placeholder="Search..."  />
     <button (click)="viewProduct()" class="reset-btn primary-btn">Agregar</button>
   </div>
-  <div class="content-bg-color mt-1 p-2">
+  <div class="content-bg-color mt-1 p-2 overflow-hidden">
+    <div class="overflow-x-scroll w-80vw">
     <table class="products-table bg-aliceblue">
       <thead>
         <tr>
           <th>Logo</th>
-          <th>Nombre del producto</th>
+          <th class="nowrap">Nombre del producto</th>
           <th class="nowrap">Descripción &#9432;</th>
           <th class="nowrap">Fecha de liberación &#9432; </th>
           <th class="nowrap span-2">Fecha de reestructuración &#9432;</th>
@@ -44,8 +45,22 @@
           </td>
         </tr>
         }
+        @if (loadingProducts) {
+          @for (_item of [1,2,3,4]; track $index) {
+          <tr>
+            <td><div class="skeleton-field shimmer"></div></td>
+            <td><div class="skeleton-field shimmer"></div></td>
+            <td><div class="skeleton-field shimmer"></div></td>
+            <td><div class="skeleton-field shimmer"></div></td>
+            <td><div class="skeleton-field shimmer"></div></td>
+            <td><div class="skeleton-field shimmer"></div></td>
+          </tr>
+          }
+        }
+
       </tbody>
     </table>
+    </div>
 
     <app-context-menu #contextMenu>
       <div class="option" (click)="updateProduct()">
@@ -56,7 +71,7 @@
       </div>
     </app-context-menu>
 
-    <div class="row space-between">
+    <div class="row space-between items-center">
       @if(productsSearch){
         <p >{{ productsSearch.slice(0,itemsPerPage).length }} resultados</p>
       } @else if(productsRequestError){
@@ -66,7 +81,7 @@
       }
 
       <p>
-        <select [(ngModel)]="itemsPerPage" class="">
+        <select [(ngModel)]="itemsPerPage" class="items-per-page">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
@@ -74,6 +89,7 @@
       </p>
     </div>
   </div>
+
 
   <app-modal #modal></app-modal>
 </div>

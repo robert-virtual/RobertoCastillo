@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {  FormControl, FormGroup, ReactiveFormsModule,  Validators } from '@angular/forms';
 import { ProductsService } from '../services/products.service';
 import { Product } from '../types/Product';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ModalComponent } from '../modal/modal.component';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, debounceTime, map, Observable, of, switchMap, take } from 'rxjs';
 import { dateExactlyOneYearAfter, dateGreaterThan, idVerification } from '../lib/validatorFunctions';
 
 @Component({
@@ -30,6 +29,8 @@ export class ProductComponent implements OnInit{
   checkParams(){
     const id = this.route.snapshot.paramMap.get('id');
     if (id == '0' || !id) {
+      // se agregar el validador de fecha mayor a la actual
+      this.productForm.controls.date_release.removeValidators(dateGreaterThan(new Date()))
       this.productForm.controls.id.enable()
       return
     }
@@ -52,7 +53,6 @@ export class ProductComponent implements OnInit{
     
   }
   @ViewChild('modal') modalComponent!:ModalComponent
-
   productForm = new FormGroup({
     id: new FormControl(
         '',
@@ -66,13 +66,14 @@ export class ProductComponent implements OnInit{
     name: new FormControl('',{validators:[Validators.required,Validators.minLength(6),Validators.maxLength(100)]},),
     description: new FormControl('',{validators:[Validators.required,Validators.minLength(10),Validators.maxLength(200)]}),
     logo: new FormControl('',{validators:[Validators.required]}),
-    date_release: new FormControl('',{validators:[Validators.required,dateGreaterThan(new Date())]}),
-    date_revision: new FormControl('',{validators:[Validators.required,dateExactlyOneYearAfter(new Date())]}),
+    date_release: new FormControl('',{validators:[Validators.required]}),
+    date_revision: new FormControl('',{validators:[Validators.required,dateExactlyOneYearAfter()]}),
   })
   createProductError?:string
+  sendingForm:boolean = false
   sendForm(){
     console.log({productForm:this.productForm});
-    console.log({idErrors:this.productForm.controls.id.hasError('')}) 
+    console.log({idExists:this.productForm.controls.id.hasError('idExists')}) 
     if (!this.productForm.valid) {
       this.productForm.markAllAsTouched()
      return 
@@ -81,10 +82,13 @@ export class ProductComponent implements OnInit{
     const product = this.productForm.value as Product
     console.log({product});
     if (this.formMode == 'update') {
-     this.updateProduct(product) 
-    this.productForm.controls.id.disable()
+      this.productForm.disable()
+      this.sendingForm = true
+      this.updateProduct(product) 
     }
     if (this.formMode == 'new') {
+    this.productForm.disable()
+      this.sendingForm = true
      this.createNewProduct(product) 
     }
     
@@ -94,6 +98,9 @@ export class ProductComponent implements OnInit{
   updateProduct(product:Product){
     this.productService.upateProduct(product).subscribe({
       next:(data)=>{
+        this.productForm.enable()
+        this.productForm.controls.id.disable()
+        this.sendingForm = false
         console.log(data);
         this.modalComponent.showModal({
           description:data.message,
@@ -109,6 +116,9 @@ export class ProductComponent implements OnInit{
         })
       },
       error:(error:HttpErrorResponse)=>{
+        this.productForm.enable()
+        this.productForm.controls.id.disable()
+        this.sendingForm = false
         console.log(error);
         this.createProductError = error.message
         this.modalComponent.showModal({
@@ -130,6 +140,8 @@ export class ProductComponent implements OnInit{
     this.productService.createProduct(product).subscribe({
       next:(data)=>{
         console.log(data);
+        this.productForm.enable()
+        this.sendingForm = false
         this.modalComponent.showModal({
           description:data.message,
           buttons:[
@@ -145,6 +157,8 @@ export class ProductComponent implements OnInit{
       },
       error:(error:HttpErrorResponse)=>{
         console.log(error);
+        this.productForm.enable()
+        this.sendingForm = false
         this.createProductError = error.message
         this.modalComponent.showModal({
           description:error.message,
