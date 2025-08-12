@@ -13,7 +13,7 @@ export class ProductsService {
   deleteProduct(id:string){
     return this.http.delete<CreateProductRes>(`/bp/products/${id}`,{headers:{'Accept':'application/json'}})
   }
-  upateProduct(product:Product){
+  updateProduct(product:Product){
     return this.http.put<CreateProductRes>(`/bp/products/${product.id}`,{...product,id:undefined},{headers:{'Accept':'application/json'}})
   }
   createProduct(product:Product){

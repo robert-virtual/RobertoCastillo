@@ -96,7 +96,7 @@ export class ProductComponent implements OnInit{
 
 
   updateProduct(product:Product){
-    this.productService.upateProduct(product).subscribe({
+    this.productService.updateProduct(product).subscribe({
       next:(data)=>{
         this.productForm.enable()
         this.productForm.controls.id.disable()
