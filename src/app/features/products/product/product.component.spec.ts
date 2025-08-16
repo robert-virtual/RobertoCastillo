@@ -5,8 +5,8 @@ import { ProductComponent } from './product.component';
 import { provideHttpClient } from '@angular/common/http';
 import {  provideRouter } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ProductsService } from '../services/products.service';
-import { Product } from '../types/Product';
+import { ProductsService } from '../../../core/services/products/products.service';
+import { Product } from '../../../core/services/products/Product';
 
 describe('ProductComponent', () => {
   let component: ProductComponent;

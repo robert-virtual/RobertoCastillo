@@ -1,0 +1,70 @@
+.search-input {
+  border-radius: 0.5rem;
+  border: solid gray 1px;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
+
+.w-80vw {
+  width: 80vw;
+}
+
+.products-table {
+  border-collapse: collapse;
+  max-width: 100%;
+
+  thead {
+    tr {
+      text-align: left;
+    }
+  }
+
+  th,
+  td {
+    padding: 1rem;
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #dddddd;
+    }
+  }
+}
+
+.items-per-page {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.skeleton-field {
+  border-radius: 0.25rem;
+  width: 5rem;
+  height: 1rem;
+  background-color: #dddddd;
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #EDEDED 30%,
+    #DCDCDC 50%,
+    #EDEDED 70%
+  );
+  background-size: 400%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

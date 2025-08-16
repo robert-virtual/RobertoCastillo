@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ModalButton, ModalOptions } from '../types/ModalOptions';
+import { ModalButton, ModalOptions } from './ModalOptions';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.css'
+  styleUrl: './modal.component.scss'
 })
 export class ModalComponent {
 

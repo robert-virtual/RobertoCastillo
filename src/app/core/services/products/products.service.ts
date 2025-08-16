@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BaseResponse } from '../types/BaseResponse';
-import { CreateProductRes, Product } from '../types/Product';
+import { BaseResponse } from '../../types/BaseResponse';
+import { CreateProductRes, Product } from './Product';
 @Injectable({
   providedIn: 'root'
 })

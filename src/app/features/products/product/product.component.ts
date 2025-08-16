@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {  FormControl, FormGroup, ReactiveFormsModule,  Validators } from '@angular/forms';
-import { ProductsService } from '../services/products.service';
-import { Product } from '../types/Product';
+import { ProductsService } from '@core/services/products/products.service';
+import { Product } from '@core/services/products/Product';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ModalComponent } from '../modal/modal.component';
+import { ModalComponent } from '@shared/components/modal/modal.component';
 import { ActivatedRoute } from '@angular/router';
-import { dateExactlyOneYearAfter, dateGreaterThan, idVerification } from '../lib/validatorFunctions';
+import { dateGreaterThan, idVerification } from '../validators/product.validator';
 
 @Component({
   selector: 'app-product',
   standalone: true,
   imports: [ReactiveFormsModule,ModalComponent],
   templateUrl: './product.component.html',
-  styleUrl: './product.component.css'
+  styleUrl: './product.component.scss'
 })
 export class ProductComponent implements OnInit{
 
@@ -24,6 +24,20 @@ export class ProductComponent implements OnInit{
   }
   ngOnInit(): void {
     this.checkParams()
+    this.updateDateRevisionOnChanges()
+  }
+  updateDateRevisionOnChanges(){
+    this.productForm.controls.date_release.valueChanges.subscribe((value)=>{
+      if (!value) {
+       return 
+      } 
+      const releasedate = new Date(value);
+      releasedate.setHours(0,0,0,0)
+      releasedate.setDate(releasedate.getDate()+1)
+      const oneYearAfter = new Date(releasedate);
+      oneYearAfter.setFullYear(releasedate.getFullYear() + 1);
+      this.productForm.controls.date_revision.setValue(oneYearAfter.toISOString().split("T")[0])
+    })
   }
   formMode:'new' |'update' = 'new' 
   checkParams(){
@@ -67,7 +81,7 @@ export class ProductComponent implements OnInit{
     description: new FormControl('',{validators:[Validators.required,Validators.minLength(10),Validators.maxLength(200)]}),
     logo: new FormControl('',{validators:[Validators.required]}),
     date_release: new FormControl('',{validators:[Validators.required]}),
-    date_revision: new FormControl('',{validators:[Validators.required,dateExactlyOneYearAfter()]}),
+    date_revision: new FormControl({value:'',disabled:true}),
   })
   createProductError?:string
   sendingForm:boolean = false
@@ -79,6 +93,7 @@ export class ProductComponent implements OnInit{
      return 
     }
     this.productForm.controls.id.enable()
+    this.productForm.controls.date_revision.enable()
     const product = this.productForm.value as Product
     console.log({product});
     if (this.formMode == 'update') {
@@ -141,6 +156,7 @@ export class ProductComponent implements OnInit{
       next:(data)=>{
         console.log(data);
         this.productForm.enable()
+        this.productForm.controls.date_revision.enable()
         this.sendingForm = false
         this.modalComponent.showModal({
           description:data.message,
@@ -158,6 +174,7 @@ export class ProductComponent implements OnInit{
       error:(error:HttpErrorResponse)=>{
         console.log(error);
         this.productForm.enable()
+        this.productForm.controls.date_revision.enable()
         this.sendingForm = false
         this.createProductError = error.message
         this.modalComponent.showModal({

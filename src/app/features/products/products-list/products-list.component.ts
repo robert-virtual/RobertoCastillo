@@ -1,18 +1,18 @@
 import { Component, OnInit, viewChild, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ProductsService } from '../services/products.service';
-import { Product } from '../types/Product';
+import { ProductsService } from '@core/services/products/products.service';
+import { Product } from '@core/services/products/Product';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { ModalComponent } from '../modal/modal.component';
-import { ContextMenuComponent } from "../context-menu/context-menu.component";
+import { ModalComponent } from '@shared/components/modal/modal.component';
+import { ContextMenuComponent } from "@shared/components/context-menu/context-menu.component";
 @Component({
   selector: 'app-products-list',
   standalone: true,
   imports: [FormsModule, CommonModule, ModalComponent, ContextMenuComponent],
   templateUrl: './products-list.component.html',
-  styleUrl: './products-list.component.css',
+  styleUrl: './products-list.component.scss',
 })
 export class ProductsListComponent implements OnInit {
   constructor(
