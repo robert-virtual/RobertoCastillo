@@ -6,11 +6,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { ActivatedRoute } from '@angular/router';
 import { dateGreaterThan, idVerification } from '../validators/product.validator';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [ReactiveFormsModule,ModalComponent],
+  imports: [ReactiveFormsModule,ModalComponent,CommonModule],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss'
 })
@@ -155,6 +156,7 @@ export class ProductComponent implements OnInit{
     this.productService.createProduct(product).subscribe({
       next:(data)=>{
         console.log(data);
+        this.productForm.reset()
         this.productForm.enable()
         this.productForm.controls.date_revision.enable()
         this.sendingForm = false
@@ -164,7 +166,6 @@ export class ProductComponent implements OnInit{
             {
               text:"Aceptar",
               onclick:()=>{
-                this.productForm.reset()
               },
               class:"reset-btn primary-btn",
             }

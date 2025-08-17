@@ -43,13 +43,35 @@ export class ProductsListComponent implements OnInit {
         p.description.toLowerCase().includes(this._search.toLocaleLowerCase())
     ))
   }
+
+  _currentPage = 1;
+  get currentPage(){
+    return this._currentPage 
+  }
+  set currentPage(page:number){
+    if (page == 0 || page > this.pages.length) {
+     return 
+    }
+    let start = (page-1)*this.itemsPerPage
+    let end = start+this.itemsPerPage
+    this.productsSearch = this.products?.slice(start,end)
+     this._currentPage = page
+  }
+  get pages(){
+    let items = this.products?.length ?? 0
+    let _pages = Math.ceil(items/this.itemsPerPage)
+    let arr = Array.from({length:_pages},(_,i)=>i+1)
+    console.log({pages:_pages,items,itemsPerPage:this.itemsPerPage,arr});
+     
+    return arr
+  }
   loadingProducts: boolean = false
   loadProducts(){
     this.loadingProducts = true
-    this.productsService.getProducts().subscribe({
-      next:({data})=>{
-        this.products = data
-        this.productsSearch = data
+    this.productsService.products$.subscribe({
+      next:(products)=>{
+        this.products = products
+        this.productsSearch = products
         this.loadingProducts = false
       },
       error:(error:HttpErrorResponse)=>{
@@ -105,7 +127,6 @@ export class ProductsListComponent implements OnInit {
               {
                 next:(data)=>{
                   console.log(data);
-                  this.loadProducts()
                   this.modalComponent.showModal({
                     description:data.message,
                     buttons:[

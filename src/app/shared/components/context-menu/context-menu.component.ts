@@ -17,7 +17,8 @@ export class ContextMenuComponent {
   showContextMenu(event:MouseEvent){
     event.stopPropagation()
     this.contextMenuVisible = true
-    this.contextMenuTop = event.clientY
+    console.log({contextMenuTop:event.clientY,contextMenuLeft:event.clientX})
+    this.contextMenuTop = event.clientY + window.scrollY
     this.contextMenuLeft = event.clientX
   }
   hideContextMenu(){

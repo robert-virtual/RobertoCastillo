@@ -1,95 +1,135 @@
-<div >
+<div>
   <div class="row space-between">
-    <input [(ngModel)]="search" #ctrl="ngModel" class="reset-input search-input" type="search" placeholder="Search..."  />
-    <button (click)="viewProduct()" class="reset-btn primary-btn">Agregar</button>
+    <input
+      [(ngModel)]="search"
+      #ctrl="ngModel"
+      class="reset-input search-input"
+      type="search"
+      placeholder="Buscar..."
+      aria-label="Buscar productos"
+      aria-required="true"
+    />
+    <button (click)="viewProduct()" class="reset-btn primary-btn" aria-label="Agregar producto">
+      Agregar
+    </button>
   </div>
+  
   <div class="content-bg-color mt-1 p-2 overflow-hidden">
-    <div class="overflow-x-scroll w-80vw">
-    <table class="products-table bg-aliceblue">
-      <thead>
-        <tr>
-          <th>Logo</th>
-          <th class="nowrap">Nombre del producto</th>
-          <th class="nowrap">Descripción &#9432;</th>
-          <th class="nowrap">Fecha de liberación &#9432; </th>
-          <th class="nowrap span-2">Fecha de reestructuración &#9432;</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-
-        @for (product of productsSearch?.slice(0,itemsPerPage); track $index) {
-        <tr (click)="viewProduct(product.id)">
-          <td> <img [src]="product.logo" [alt]="product.name"> </td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.description }}</td>
-          <td>{{ product.date_release }}</td>
-          <td>{{ product.date_revision }}</td>
-          <td (click)="showContextMenu($event,product)" >
-            <button class="btn h-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
-                />
-              </svg>
-            </button>
-          </td>
-        </tr>
-        }
-        @if (loadingProducts) {
-          @for (_item of [1,2,3,4]; track $index) {
-          <tr>
-            <td><div class="skeleton-field shimmer"></div></td>
-            <td><div class="skeleton-field shimmer"></div></td>
-            <td><div class="skeleton-field shimmer"></div></td>
-            <td><div class="skeleton-field shimmer"></div></td>
-            <td><div class="skeleton-field shimmer"></div></td>
-            <td><div class="skeleton-field shimmer"></div></td>
+    <div class="overflow-x-scroll">
+      <table class="products-table bg-aliceblue" role="table" aria-labelledby="productsTableHeader">
+        <caption id="productsTableHeader" class="sr-only">Lista de productos disponibles</caption>
+        <thead>
+          <tr role="row">
+            <th role="columnheader">Logo</th>
+            <th role="columnheader" class="nowrap">Nombre del producto</th>
+            <th role="columnheader" class="nowrap">Descripción &#9432;</th>
+            <th role="columnheader" class="nowrap">Fecha de liberación &#9432;</th>
+            <th role="columnheader" class="nowrap span-2">Fecha de reestructuración &#9432;</th>
+            <th role="columnheader"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of productsSearch?.slice(0, itemsPerPage); track $index) {
+          <tr role="row" tabindex="0" (click)="viewProduct(product.id)" [attr.aria-label]="'Ver detalles del producto ' + product.name ">
+            <td role="cell">
+              <img class="profile-img" [src]="product.logo" [alt]="product.name" />
+            </td>
+            <td role="cell">{{ product.name }}</td>
+            <td role="cell">{{ product.description }}</td>
+            <td role="cell">{{ product.date_release }}</td>
+            <td role="cell">{{ product.date_revision }}</td>
+            <td role="cell" (click)="showContextMenu($event, product)" aria-label="Abrir menú de opciones" tabindex="0">
+              <button class="btn h-2 w-2" [attr.aria-label]="'Abrir menú de opciones para ' + product.name ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                  />
+                </svg>
+              </button>
+            </td>
           </tr>
           }
-        }
-
-      </tbody>
-    </table>
+          @if (loadingProducts) {
+            @for (_item of [1, 2, 3, 4]; track $index) {
+            <tr role="row">
+              <td role="cell"><div class="skeleton-field shimmer"></div></td>
+              <td role="cell"><div class="skeleton-field shimmer"></div></td>
+              <td role="cell"><div class="skeleton-field shimmer"></div></td>
+              <td role="cell"><div class="skeleton-field shimmer"></div></td>
+              <td role="cell"><div class="skeleton-field shimmer"></div></td>
+              <td role="cell"><div class="skeleton-field shimmer"></div></td>
+            </tr>
+            }
+          }
+        </tbody>
+      </table>
     </div>
 
     <app-context-menu #contextMenu>
-      <div class="option" (click)="updateProduct()">
+      <div class="option" role="menuitem" (click)="updateProduct()">
         <span>Actualizar</span>
       </div>
-      <div class="option" (click)="deleteProduct()">
+      <div class="option" role="menuitem" (click)="deleteProduct()">
         <span>Eliminar</span>
       </div>
     </app-context-menu>
 
-    <div class="row space-between items-center">
-      @if(productsSearch){
-        <p >{{ productsSearch.slice(0,itemsPerPage).length }} resultados</p>
-      } @else if(productsRequestError){
-        <p>Ocurrio un error al consultar productos</p>
-      } @else{
-        <p > No se encontraron resultados</p>
+    <div class="row space-between items-center flex-wrap gap-1">
+      @if(productsSearch) {
+        <p class="mx-auto">{{ productsSearch.slice(0, itemsPerPage).length }} resultados</p>
+      } @else if(productsRequestError) {
+        <p>Ocurrió un error al consultar productos</p>
+      } @else {
+        <p>No se encontraron resultados</p>
       }
 
-      <p>
-        <select [(ngModel)]="itemsPerPage" class="items-per-page">
+      <div class="row gap-1 items-center mx-auto">
+        <button 
+          [disabled]="currentPage == 1" 
+          (click)="currentPage = currentPage - 1" 
+          class="btn page-btn row items-center h-2 w-2" aria-label="Página anterior">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+        
+        <button 
+          class="btn page-btn h-2 w-2" 
+          [ngClass]="{'page-btn-selected': page == currentPage}" 
+          (click)="currentPage = page" 
+          *ngFor="let page of pages" 
+          [attr.aria-label]="'Ir a la página ' + page ">
+          {{ page }}
+        </button>
+
+        <button 
+          [disabled]="currentPage == pages.length"
+          (click)="currentPage = currentPage + 1" 
+          class="btn page-btn row items-center h-2 w-2" aria-label="Página siguiente">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      </div>
+      <div class="row items-center gap-1 mx-auto">
+        <label for="itemsPerPage">elementos por pagina</label> 
+        <select id="itemsPerPage" *ngIf="productsSearch?.length" [(ngModel)]="itemsPerPage" class="items-per-page" aria-label="Seleccionar cantidad de productos por página">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
         </select>
-      </p>
+      </div>
     </div>
   </div>
-
 
   <app-modal #modal></app-modal>
 </div>

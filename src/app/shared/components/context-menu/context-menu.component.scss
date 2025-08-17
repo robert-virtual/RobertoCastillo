@@ -7,17 +7,14 @@
   box-shadow: 0 0 6px gray;
   background-color: var(--content-bg-color);
 
-  :host {
-    ::ng-deep {
-      .option {
-        border-bottom: #dddddd 1px solid;
-        padding: 0.5rem;
+}
 
-        &:hover {
-          background-color: var(--bg-color);
-        }
-      }
-    }
+:host ::ng-deep .option{
+  border-bottom: #dddddd 1px solid;
+  padding: 0.5rem;
+
+  &:hover {
+    background-color: var(--bg-color);
   }
 }
 
