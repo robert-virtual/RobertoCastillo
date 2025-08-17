@@ -28,8 +28,8 @@ describe('ProductsService', () => {
   });
 
   it('should get products', () => {
-    service.getProducts().subscribe(({data})=>{
-        expect(data.length).toBeGreaterThanOrEqual(0)
+    service.getProducts().subscribe((products)=>{
+        expect(products.length).toBeGreaterThanOrEqual(0)
     })
   });
 
